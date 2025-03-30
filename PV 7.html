@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phrasal Verbs Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+    <div id="app" class="w-full max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-xl mt-10">
+        <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">Phrasal Verbs Quiz</h1>
+        <button class="bg-yellow-500 text-white p-2 rounded-lg text-md hover:bg-yellow-600 transition-all" onclick="toggleNotes()">Open Notes</button>
+        <div id="level-selection" class="space-y-4">
+            <p class="text-xl text-gray-700 text-center mb-6">Select a level to start the quiz:</p>
+            <button class="w-full bg-blue-500 text-white p-3 rounded-lg text-lg hover:bg-blue-600 transition-all" onclick="startQuiz('beginner')">Beginner</button>
+            <button class="w-full bg-green-500 text-white p-3 rounded-lg text-lg hover:bg-green-600 transition-all" onclick="startQuiz('intermediate')">Intermediate</button>
+            <button class="w-full bg-red-500 text-white p-3 rounded-lg text-lg hover:bg-red-600 transition-all" onclick="startQuiz('advanced')">Advanced</button>
+        </div>
+        <div id="quiz-container" class="hidden text-center space-y-4">
+            <p id="question" class="text-xl font-semibold mb-4"></p>
+            <div id="options" class="grid grid-cols-2 gap-4"></div>
+            <p id="feedback" class="mt-4 text-lg font-semibold text-gray-800"></p>
+            <p class="mt-4 text-gray-600">Correct: <span id="correct-count">0</span> | Incorrect: <span id="incorrect-count">0</span></p>
+            <button class="mt-6 bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 transition-all" onclick="returnToMenu()">Back to Menu</button>
+            <!-- Botón de reinicio, alineado a la derecha -->
+            <button class="mt-6 bg-blue-500 text-white p-2 rounded-md text-sm hover:bg-blue-600 transition-all absolute top-0 right-0 m-4" onclick="startQuiz('beginner')">Restart</button>
+        </div>
+        <div id="notes-container" class="hidden p-4 bg-gray-200 rounded-lg mt-6">
+            <textarea id="notes" class="w-full h-40 p-2 border border-gray-400 rounded" placeholder="Write your notes here..." oninput="saveNotes()"></textarea>
+        </div>
+    </div>
+
+    <script>
+        const questions = {
+            beginner: [
+                { sentence: "Can you _____ your data regularly?", correct: "back up", options: ["back up", "blow up", "broke down", "bring up"] },
+                { sentence: "Did you hear the building _____ last night?", correct: "blow up", options: ["blow up", "call off", "cheer up", "hand in"] },
+                { sentence: "My car _____ on the way here.", correct: "broke down", options: ["broke down", "carry on", "ate out", "sort out"] },
+                { sentence: "He _____ an interesting point in the meeting.", correct: "brought up", options: ["brought up", "gave up", "look after", "run out of"] },
+                { sentence: "I need to _____ on my Spanish for the trip.", correct: "brush up", options: ["brush up", "join in", "throw away", "turn up"] },
+                { sentence: "Please _____ me back when you get a chance.", correct: "call back", options: ["call back", "show off", "take after", "work out"] },
+                { sentence: "The event was _____ due to the rain.", correct: "called off", options: ["called off", "figured out", "took up", "warm up"] },
+                { sentence: "Keep going, don't _____ like that!", correct: "carry on", options: ["carry on", "wear out", "back up", "look forward to"] },
+                { sentence: "Let's _____ soon! It's been a while.", correct: "catch up", options: ["catch up", "set up", "turn down", "go away"] },
+                { sentence: "_____ up, everything will be fine!", correct: "cheer up", options: ["cheer up", "drop by", "put off", "hand in"] },
+                { sentence: "We need to _____ the kitchen after dinner.", correct: "clean up", options: ["clean up", "give up", "turn up", "bring up"] },
+                { sentence: "I _____ an old photo album yesterday.", correct: "came across", options: ["came across", "keep up with", "put away", "look after"] },
+                { sentence: "Why don't you _____ for coffee later?", correct: "come over", options: ["come over", "use up", "set up", "sort out"] },
+                { sentence: "She _____ a great idea for the project.", correct: "came up with", options: ["came up with", "called off", "warm up", "wear out"] },
+                { sentence: "I'm trying to _____ on sugar.", correct: "cut down", options: ["cut down", "look forward to", "try on", "throw away"] },
+                { sentence: "You should _____ and see me sometime.", correct: "drop by", options: ["drop by", "catch up", "hand in", "turn down"] },
+                { sentence: "We decided to _____ for dinner tonight.", correct: "eat out", options: ["eat out", "figure out", "run out of", "wear out"] },
+                { sentence: "I _____ missing the last train.", correct: "ended up", options: ["ended up", "cheer up", "put off", "called back"] },
+                { sentence: "I need to _____ how to fix my computer.", correct: "figure out", options: ["figure out", "take up", "set up", "give up"] },
+                { sentence: "I just _____ that I got the job!", correct: "found out", options: ["found out", "called off", "took after", "warm up"] },
+                { sentence: "They _____ very well with each other.", correct: "get along", options: ["get along", "show off", "wear out", "turn down"] },
+                { sentence: "She managed to _____ her fear of flying.", correct: "get over", options: ["get over", "take after", "look after", "run out of"] },
+                { sentence: "I'll never _____ on my dreams.", correct: "give up", options: ["give up", "sort out", "try on", "bring up"] },
+                { sentence: "Please _____, I need some quiet time.", correct: "go away", options: ["go away", "turn down", "set up", "put away"] },
+                { sentence: "I can't believe how much you've _____!", correct: "grown up", options: ["grown up", "cut down", "look after", "join in"] },
+                { sentence: "Don't forget to _____ your assignment tomorrow.", correct: "hand in", options: ["hand in", "wear out", "drop by", "bring up"] },
+                { sentence: "We should _____ the discussion.", correct: "join in", options: ["join in", "take off", "warm up", "call back"] },
+                { sentence: "I can't _____ with all these emails!", correct: "keep up with", options: ["keep up with", "throw away", "put off", "set up"] },
+                { sentence: "She really _____ me down when she didn’t show up.", correct: "let down", options: ["let down", "look forward to", "sort out", "turn up"] },
+                { sentence: "I'll _____ your cat while you're away.", correct: "look after", options: ["look after", "use up", "call off", "drop by"] },
+                { sentence: "I _____ our meeting next week.", correct: "look forward to", options: ["look forward to", "warm up", "wear out", "run out of"] },
+                { sentence: "_____ away your toys before you go outside.", correct: "put away", options: ["put away", "turn down", "set up", "catch up"] },
+                { sentence: "We had to _____ our meeting until next week.", correct: "put off", options: ["put off", "throw away", "grow up", "show off"] },
+                { sentence: "He's been _____ a lot lately.", correct: "putting up with", options: ["putting up with", "getting over", "eating out", "joining in"] },
+                { sentence: "We've _____ of milk.", correct: "run out of", options: ["run out of", "drop by", "take up", "cheer up"] },
+                { sentence: "I'll help you _____ your new computer.", correct: "set up", options: ["set up", "take off", "figure out", "call back"] },
+                { sentence: "He likes to _____ his new car.", correct: "show off", options: ["show off", "work out", "wear out", "keep up with"] },
+                { "sentence": "We need to ___ the problems before the meeting.", "correct": "sort out", "options": ["sort out", "figure out", "work out", "clear up"] },
+                { "sentence": "You really ___ your mother.", "correct": "take after", "options": ["take after", "look up to", "grow up", "come after"] },
+                { "sentence": "The plane ___ on time.", "correct": "took off", "options": ["took off", "set off", "went off", "got off"] },
+                { "sentence": "I’m thinking of ___ a new hobby.", "correct": "taking up", "options": ["taking up", "picking up", "getting into", "going in for"] },
+                { "sentence": "I had to ___ those old shoes.", "correct": "throw away", "options": ["throw away", "give away", "hand over", "get rid of"] },
+                { "sentence": "Can I ___ this jacket?", "correct": "try on", "options": ["try on", "put on", "slip on", "take off"] },
+                { "sentence": "She ___ the job offer.", "correct": "turned down", "options": ["turned down", "gave up", "put off", "backed out"] },
+                { "sentence": "He didn’t ___ at the party last night.", "correct": "turn up", "options": ["turn up", "show up", "come over", "drop by"] },
+                { "sentence": "We’ve ___ all the paper.", "correct": "used up", "options": ["used up", "run out of", "gave out", "went through"] },
+                { "sentence": "Let's ___ before we start running.", "correct": "warm up", "options": ["warm up", "cool down", "stretch out", "loosen up"] },
+                { "sentence": "These shoes are starting to ___.", "correct": "wear out", "options": ["wear out", "break down", "fall apart", "give out"] },
+                { "sentence": "I’m trying to ___ how to solve this problem.", "correct": "work out", "options": ["work out", "figure out", "sort out", "make out"] },
+                { "sentence": "Please ___ your name and email address.", "correct": "write down", "options": ["write down", "note down", "jot down", "set down"] },
+            ],
+
+            intermediate: [
+                { "sentence": "The burglars ___ the house and stole all the jewels.", "correct": "broke into", "options": ["broke into", "snuck into", "got into", "forced into"] },
+                { "sentence": "There must be something wrong with your mobile phone. I can't ___ you.", "correct": "get through", "options": ["get through", "break through", "call through", "cut through"] },
+                { "sentence": "I ___ an old acquaintance of mine at the airport. I hadn't seen her in years.", "correct": "ran into", "options": ["ran into", "bumped into", "came across", "stumbled upon"] },
+                { "sentence": "I told her to slow down, otherwise she would ___ the car up front.", "correct": "crash into", "options": ["crash into", "run into", "bump into", "smash into"] },
+                { "sentence": "What do the letters WHO ___ for? – The World Health Organisation.", "correct": "stand for", "options": ["stand for", "spell out", "make up", "add up to"] },
+                { "sentence": "We usually ___ at our favourite restaurant once a month.", "correct": "eat out", "options": ["eat out", "dine out", "pig out", "order in"] },
+                { "sentence": "Please ___ the names you don't want to have on the list.", "correct": "cross out", "options": ["cross out", "strike out", "rub out", "wipe out"] },
+                { "sentence": "My teacher told me to stop being so childish and start ___.", "correct": "growing up", "options": ["growing up", "wising up", "maturing up", "shaping up"] },
+                { "sentence": "The pilot was able to ___ for the delay caused at the airport.", "correct": "make up", "options": ["make up", "catch up", "fix up", "patch up"] },
+                { "sentence": "Jack ___ his father. He even walks in the same way.", "correct": "takes after", "options": ["takes after", "looks up to", "follows up", "goes after"] },
+                { "sentence": "My boss told me to ___ the good work. I was one of the best employees.", "correct": "keep up", "options": ["keep up", "carry on", "stay up", "follow through"] },
+                { "sentence": "I cannot ___ your bad behaviour anymore. I'm calling your parents.", "correct": "put up with", "options": ["put up with", "deal with", "live with", "stand for"] },
+                { "sentence": "I hope everything ___ for you in your new job.", "correct": "works out", "options": ["works out", "pans out", "comes through", "turns around"] },
+                { "sentence": "I ___ the manager's offer of a 10 percent raise. I demanded more.", "correct": "turned down", "options": ["turned down", "gave up", "backed out", "shut down"] },
+                { "sentence": "We had to ___ the doctor because his condition was deteriorating.", "correct": "send for", "options": ["send for", "call in", "bring in", "reach out to"] },
+                { "sentence": "I'll ___ you on a secret. – I am getting married next summer.", "correct": "let in on", "options": ["let in on", "fill in on", "bring in on", "pass on"] },
+                { "sentence": "You shouldn't leave the children alone for so long or they'll ___ something bad.", "correct": "get up to", "options": ["get up to", "mess around with", "stir up", "act up"] },
+                { "sentence": "Could you ___ a minute while I get something to write?", "correct": "hang on", "options": ["hang on", "hold on", "wait up", "stick around"] },
+                { "sentence": "It took the fire fighters almost an hour to ___ the fire.", "correct": "put out", "options": ["put out", "blow out", "stamp out", "smother out"] },
+                { "sentence": "Being a primary school teacher ___ a lot of nerves and patience.", "correct": "calls for", "options": ["calls for", "adds up to", "comes down to", "boils down to"] },
+                { "sentence": "All the employees had to ___ a form that was given to them by the personnel manager.", "correct": "fill in", "options": ["fill in", "write out", "put down", "fill out"] },
+                { "sentence": "Although he answered most of my questions, I had the feeling he was ___ something.", "correct": "keeping back", "options": ["keeping back", "holding back", "leaving out", "covering up"] },
+                { "sentence": "The older boys always ___ the younger ones at the school playground. It's so disgusting.", "correct": "pick on", "options": ["pick on", "push around", "mess with", "get at"] },
+                { "sentence": "I'll ___ you at the station on my way to work. It's not a problem.", "correct": "drop off", "options": ["drop off", "pick up", "pull up", "let off"] },
+                { "sentence": "My doctor advised me to ___ smoking.", "correct": "give up", "options": ["give up", "cut down on", "pack in", "knock off"] },
+                { "sentence": "The bright blue scarf ___ your new dress perfectly.", "correct": "goes with", "options": ["goes with", "ties in with", "fits in with", "matches up with"] },
+                { "sentence": "The investigator told me he would ___ the matter.", "correct": "look into", "options": ["look into", "check into", "dig into", "go through"] },
+                { "sentence": "The sun has just ___ so I expect that the rest of the afternoon will be quite warm.", "correct": "come out", "options": ["come out", "brighten up", "show up", "light up"] },
+                { "sentence": "The prosecutor ___ an expert on DNA analysis.", "correct": "brought in", "options": ["brought in", "called in", "sent for", "roped in"] },
+                { "sentence": "John and Marjorie have decided to ___ after being together for five years.", "correct": "break off", "options": ["break off", "split up", "call it off", "drift apart"] },
+                { "sentence": "The man ___ the room without knocking and told us about the accident that had just happened.", "correct": "burst into", "options": ["burst into", "storm into", "rush into", "barge into"] },
+                { "sentence": "It's difficult to ___ the licence plate number of the car over there. It's so far away.", "correct": "make out", "options": ["make out", "pick out", "spot out", "figure out"] },
+                { "sentence": "Is that the truth or did you just ___ a story?", "correct": "make up", "options": ["make up", "dream up", "think up", "come up with"] },
+                { "sentence": "Jack couldn't ___ his anger and started shouting at everyone.", "correct": "hold back", "options": ["hold back", "keep in", "bottle up", "fight down"] },
+                { "sentence": "The teacher wasn't paying any attention, so he ___ an old trick I played on him.", "correct": "fell for", "options": ["fell for", "got taken in by", "bought into", "was fooled by"] },
+                { "sentence": "My parents always let me ___ until after midnight. It's very generous of them.", "correct": "stay out", "options": ["stay out", "hang out", "keep out", "be out"] },
+                { "sentence": "The noise ___ after the politician appeared in the middle of the crowd.", "correct": "died down", "options": ["died down", "let up", "eased off", "wore off"] },
+                { "sentence": "I'm counting on you for support so please don't ___ me.", "correct": "let down", "options": ["let down", "give up on", "back out on", "turn against"] },
+                { "sentence": "Don't buy an e-bike unless you have an opportunity to ___ it.", "correct": "try out", "options": ["try out", "check out", "go over", "run through"] },
+                { "sentence": "The player didn't ___ to my expectations so I substituted him.", "correct": "live up", "options": ["live up", "measure up", "stand up to", "hold up to"] },
+                { "sentence": "Please ___ the lights when you leave.", "correct": "turn off", "options": ["turn off", "switch off", "shut down", "power off"] },
+                { "sentence": "A black limousine ___ the Capitol and the President got out.", "correct": "drew up", "options": ["drew up", "pulled up", "rolled up", "came up"] },
+                { "sentence": "The manager had gone ___ the new documents with his lawyers before he came to a decision.", "correct": "through", "options": ["through", "over", "back through", "down with"] },
+                { "sentence": "John ___ his wife's cheating on him and filed for divorce.", "correct": "found out", "options": ["found out", "caught on to", "picked up on", "got wind of"] },
+                { "sentence": "The company came ___ some financial difficulties and had to close some of their factories.", "correct": "up against", "options": ["up against", "ran into", "faced up to", "got caught up in"] },
+                { "sentence": "I tried to find a solution to the problem, but I simply couldn't ___ it.", "correct": "work out", "options": ["work out", "figure out", "sort out", "think through"] },
+                { "sentence": "Normally, planes ___ on time but today there are delays due to the foggy weather.", "correct": "take off", "options": ["take off", "lift off", "get off", "move off"] },
+                { "sentence": "They don't have so much money but in most months they can ___.", "correct": "get by", "options": ["get by", "scrape by", "make do", "get through"] },
+                { "sentence": "Is that the truth or did you just ___ such a story?", "correct": "make up", "options": ["make up", "dream up", "think up", "come up with"] },
+                { "sentence": "Jack couldn't ___ his anger and started shouting at everyone.", "correct": "hold back", "options": ["hold back", "bottle up", "fight down", "keep in"] },
+                { "sentence": "The teacher wasn't paying any attention, so he ___ an old trick I played on him.", "correct": "fell for", "options": ["fell for", "got taken in", "bought into", "was fooled by"] },
+                { "sentence": "My parents always ___ me ___ until after midnight. It's very generous of them.", "correct": "let stay out", "options": ["let stay out", "let go out", "let hang out", "let be out"] },
+                { "sentence": "The noise ___ after the politician appeared in the middle of the crowd.", "correct": "died down", "options": ["died down", "let up", "eased off", "wore off"] },
+                { "sentence": "I'm counting on you for support so please don't ___ me.", "correct": "let down", "options": ["let down", "back out on", "give up on", "turn against"] },
+                { "sentence": "Don't buy an e-bike unless you have an opportunity to ___ it.", "correct": "try out", "options": ["try out", "check out", "go over", "run through"] },
+                { "sentence": "The player didn't ___ to my expectations so I substituted him.", "correct": "live up", "options": ["live up", "measure up", "stand up to", "hold up to"] },
+                { "sentence": "Please ___ the lights when you leave.", "correct": "turn off", "options": ["turn off", "switch off", "shut down", "power off"] },
+                { "sentence": "A black limousine ___ near the Capitol and the President got out.", "correct": "drew up", "options": ["drew up", "pulled up", "rolled up", "came up"] },
+           ],
+
+            advanced: [        
+                { "sentence": "I ___ my old school books while I was clearing out the attic.", "correct": "came across", "options": ["came across", "ran into", "stumbled upon", "bumped into"] },
+                { "sentence": "He ___ quite a lot of money when his grandparents passed away.", "correct": "came into", "options": ["came into", "fell into", "ended up with", "got hold of"] },
+                { "sentence": "___ after school and we’ll work on the science project together.", "correct": "Come round", "options": ["Come round", "Drop by", "Pop in", "Stop over"] },
+                { "sentence": "I’ve ___ a great idea for our Halloween costumes.", "correct": "come up with", "options": ["come up with", "think up", "dream up", "figure out"] },
+                { "sentence": "The topic of a pay rise ___ in my meeting with the boss.", "correct": "came up", "options": ["came up", "was brought up", "turned up", "popped up"] },
+                { "sentence": "Don’t be late! Everyone is ___ you.", "correct": "counting on", "options": ["counting on", "depending on", "relying on", "leaning on"] },
+                { "sentence": "My New Year’s resolution is to ___ fast food.", "correct": "cut down on", "options": ["cut down on", "cut back on", "cut out", "give up"] },
+                { "sentence": "Sorry, the call ___ when we went through a tunnel.", "correct": "got cut off", "options": ["got cut off", "dropped out", "broke up", "faded away"] },
+                { "sentence": "My doctor has told me I need to ___ all processed meats from my diet.", "correct": "cut out", "options": ["cut out", "give up", "leave out", "stay away from"] },
+                { "sentence": "The child was struggling to ___ his shoelaces.", "correct": "do up", "options": ["do up", "tie up", "fasten up", "button up"] },
+                { "sentence": "We all ___ as monsters for Halloween.", "correct": "dressed up", "options": ["dressed up", "put on", "got into", "made up"] },
+                { "sentence": "My Dad ___ on his way home to work to say hello.", "correct": "dropped by", "options": ["dropped by", "came over", "popped in", "stopped by"] },
+                { "sentence": "The taxi ___ us ___ outside the airport.", "correct": "dropped off", "options": ["dropped off", "let out", "left off", "set down"] },
+                { "sentence": "He didn’t enjoy the economics degree course and ___ after 6 months.", "correct": "dropped out", "options": ["dropped out", "gave up", "quit out", "walked away"] },
+                { "sentence": "We got lost and ___ in a completely different town.", "correct": "ended up", "options": ["ended up", "wound up", "turned out", "landed in"] },
+                { "sentence": "She ___ for him the moment she met him.", "correct": "fell for", "options": ["fell for", "fell in love with", "was taken by", "got attached to"] },
+                { "sentence": "She ___ with her younger sister over who was going to look after grandma at Christmas.", "correct": "fell out", "options": ["fell out", "argued with", "broke up with", "drifted apart from"] },
+                { "sentence": "Yesterday she ___ that she passed her law degree.", "correct": "found out", "options": ["found out", "discovered", "came across", "picked up on"] },
+                { "sentence": "I wrote them an email to ___ my complaint from the previous day.", "correct": "follow up", "options": ["follow up", "check in on", "look into", "chase up"] },
+                { "sentence": "I ___ really well with all my teachers.", "correct": "get along", "options": ["get along", "get on with", "bond with", "connect with"] },
+                { "sentence": "We just want to ___ for the weekend and have some peace and quiet.", "correct": "get away", "options": ["get away", "take off", "go off", "head out"] },
+                { "sentence": "He stole €10 from his mum’s purse and ___ it, she blamed his brother.", "correct": "got away with", "options": ["got away with", "escaped from", "covered up", "hid away"] },
+                { "sentence": "I don’t earn much but it’s enough to ___.", "correct": "get by", "options": ["get by", "survive on", "make do", "scrape through"] },
+                { "sentence": "Stop chatting and ___ your work!", "correct": "get on with", "options": ["get on with", "carry on with", "move forward with", "press on with"] },
+                { "sentence": "It took him a long time to ___ her, I think he still loves her.", "correct": "get over", "options": ["get over", "move on from", "recover from", "let go of"] },
+                { "sentence": "I’m still ___ a nasty cold but I should be fine in a couple of days.", "correct": "getting over", "options": ["getting over", "recovering from", "bouncing back from", "shaking off"] },
+                { "sentence": "I ___ with my old uni friends every 6 months or so.", "correct": "get together", "options": ["get together", "meet up", "catch up with", "hang out with"] },
+                { "sentence": "I’m cleaning out my garage this weekend, I’m going to ___ so much old stuff.", "correct": "get rid of", "options": ["get rid of", "throw away", "clear out", "dispose of"] },
+                { "sentence": "He accidentally ___ the surprise birthday party to the birthday girl, what an idiot!", "correct": "gave away", "options": ["gave away", "let slip", "spilled the beans on", "blurted out"] },
+                { "sentence": "Hey! That’s my bag! ___ it ___!", "correct": "Give back", "options": ["Give back", "Hand back", "Return", "Pass back"] },
+                { "sentence": "Don’t forget to ___ your essays at the end of the class.", "correct": "hand in", "options": ["hand in", "give in", "hand over", "give away"] },
+                { "sentence": "The kids wouldn’t stop asking for an ice cream so I finally ___ and let them have one.", "correct": "gave in", "options": ["gave in", "gave up", "handed in", "handed over"] },
+                { "sentence": "The rotting fruit was ___ a nasty smell.", "correct": "giving off", "options": ["giving off", "giving out", "handing out", "handing over"] },
+                { "sentence": "The receptionist ___ all the most important information to the guests.", "correct": "gave out", "options": ["gave out", "handed out", "gave away", "handed over"] },
+                { "sentence": "They’re ___ free samples of delicious cheese at the supermarket.", "correct": "handing out", "options": ["handing out", "giving out", "handing over", "giving away"] },
+                { "sentence": "The sudoku puzzle was too difficult so I ___ and read a book instead.", "correct": "gave up", "options": ["gave up", "gave in", "handed in", "handed over"] },
+                { "sentence": "A: We should decorate the kitchen. B: Yeah, I’d ___ with that.", "correct": "go along", "options": ["go along", "go with", "go through", "go on"] },
+                { "sentence": "The milk has gone off, we’ll have to buy some more. A bomb ___ outside the airport, luckily nobody was hurt.", "correct": "went off", "options": ["went off", "went on", "went out", "went down"] },
+                { "sentence": "The poker game ___ for hours and hours.", "correct": "went on", "options": ["went on", "went in", "went out", "went down"] },
+                { "sentence": "Have you heard? Charlie is ___ with Kathy.", "correct": "going out", "options": ["going out", "going on", "going by", "going along"] },
+                { "sentence": "My Dad’s threatening to take away my car keys if I don’t tidy my room but I don’t think he will ___ with it.", "correct": "go through", "options": ["go through", "go on", "go along", "go by"] },
+                { "sentence": "My best friend from primary school and I ___ over the years and now we hardly speak.", "correct": "grew apart", "options": ["grew apart", "grew out", "grew off", "grew away"] },
+                { "sentence": "When I ___, I want to be a firefighter.", "correct": "grow up", "options": ["grow up", "grow out", "grow off", "grow away"] },
+                { "sentence": "We ___ outside the concert hall for 2 hours after the show trying to get an autograph.", "correct": "hung around", "options": ["hung around", "hung out", "hung on", "hung up"] },
+                { "sentence": "I’m just going to ___ with my friends tonight.", "correct": "hang out", "options": ["hang out", "hang up", "hang around", "hang in"] },
+                { "sentence": "Don’t leave your shirts on the floor, you need to ___ them up. She finished the call and then ___ up.", "correct": "hang up", "options": ["hang up", "hang on", "hang out", "hang around"] },
+                { "sentence": "Go down this street and then ___ for the big church, your hotel is right next door to it.", "correct": "head for", "options": ["head for", "go for", "head towards", "go towards"] },
+                { "sentence": "My shyness always ___ me ___ in social situations.", "correct": "holds back", "options": ["holds back", "holds up", "holds off", "holds out"] },
+                { "sentence": "We need to ___! Our train leaves in five minutes.", "correct": "hurry up", "options": ["hurry up", "speed up", "rush up", "speed along"] },
+                { "sentence": "Just ___ walking this way and you’ll get to the station in no time.", "correct": "keep on", "options": ["keep on", "go on", "carry on", "move on"] },
+                { "sentence": "Where were you on Saturday? I really needed your help and you ___ me down.", "correct": "let down", "options": ["let down", "let off", "let in", "let up"] },
+            ],
+        };
+
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+
+        
+        function startQuiz(level) {
+            currentQuestions = questions[level];
+            shuffleArray(currentQuestions); // Mezclamos las preguntas
+            currentIndex = 0;
+            correctCount = 0;
+            incorrectCount = 0;
+            document.getElementById("level-selection").classList.add("hidden");
+            document.getElementById("quiz-container").classList.remove("hidden");
+            loadQuestion();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function loadQuestion() {
+            if (currentIndex < currentQuestions.length) {
+                const question = currentQuestions[currentIndex];
+                document.getElementById("question").innerText = question.sentence;
+                let options = [...question.options];
+                shuffleArray(options);
+                const optionsHtml = options.map(option => 
+                    `<button class="bg-blue-500 text-white p-3 rounded-lg text-lg hover:bg-blue-600 transition-all" onclick="checkAnswer('${option}')">${option}</button>`
+                ).join('');
+                document.getElementById("options").innerHTML = optionsHtml;
+            } else {
+                document.getElementById("quiz-container").innerHTML = `<p class="text-lg font-semibold">Quiz completed! Final score: Correct: ${correctCount} | Incorrect: ${incorrectCount}</p><button onclick="returnToMenu()" class="bg-gray-500 text-white p-3 rounded-lg mt-4 hover:bg-gray-600 transition-all">Back to Menu</button>`;
+            }
+        }
+
+        function checkAnswer(answer) {
+            const correctAnswer = currentQuestions[currentIndex].correct;
+            if (answer === correctAnswer) {
+                correctCount++;
+                document.getElementById("feedback").innerText = "Correct!";
+            } else {
+                incorrectCount++;
+                document.getElementById("feedback").innerText = `Incorrect! The correct answer was ${correctAnswer}.`;
+                // Esperar 5 segundos antes de pasar a la siguiente pregunta si la respuesta es incorrecta
+                setTimeout(loadQuestion, 5000);
+                return; // No pasa inmediatamente a la siguiente pregunta
+            }
+            document.getElementById("correct-count").innerText = correctCount;
+            document.getElementById("incorrect-count").innerText = incorrectCount;
+            currentIndex++;
+            setTimeout(loadQuestion, 1000);
+        }
+
+        function returnToMenu() {
+            document.getElementById("level-selection").classList.remove("hidden");
+            document.getElementById("quiz-container").classList.add("hidden");
+        }
+
+        function toggleNotes() {
+            const notesContainer = document.getElementById("notes-container");
+            notesContainer.classList.toggle("hidden");
+        }
+
+        function saveNotes() {
+            localStorage.setItem("quizNotes", document.getElementById("notes").value);
+        }
+
+        function loadNotes() {
+            document.getElementById("notes").value = localStorage.getItem("quizNotes") || "";
+        }
+
+        window.onload = loadNotes;
+    </script>
+</body>
+</html>
