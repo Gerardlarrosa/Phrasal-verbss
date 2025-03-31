@@ -5,32 +5,207 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phrasal Verbs Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524495729744472"
-     crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100 font-sans antialiased">
     <div id="app" class="w-full max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-xl mt-10">
-        <h1 class="text-4xl font-bold text-center text-blue-600 mb-8">Phrasal Verbs Quiz</h1>
-        <button class="bg-yellow-500 text-white p-2 rounded-lg text-md hover:bg-yellow-600 transition-all" onclick="toggleNotes()">Open Notes</button>
-        <div id="level-selection" class="space-y-4">
+
+        <!-- Pantalla de Inicio -->
+        <div id="start-screen" class="text-center">
+            <h1 class="text-4xl font-bold text-blue-600 mb-8">Welcome to Phrasal Verbs Practice</h1>
+            <button class="w-full bg-blue-500 text-white p-3 rounded-lg text-lg hover:bg-blue-600 transition-all" onclick="showQuizMenu()">QUIZ</button>
+            <button class="w-full bg-green-500 text-white p-3 rounded-lg text-lg hover:bg-green-600 transition-all mt-4" onclick="alert('Coming soon!')">FILLING THE GAPS</button>
+            <button class="w-full bg-yellow-500 text-white p-3 rounded-lg text-lg hover:bg-yellow-600 transition-all mt-4" onclick="showTheory()">THEORY</button>
+        </div>
+
+        <!-- Selección de Nivel -->
+        <div id="level-selection" class="hidden space-y-4">
             <p class="text-xl text-gray-700 text-center mb-6">Select a level to start the quiz:</p>
             <button class="w-full bg-blue-500 text-white p-3 rounded-lg text-lg hover:bg-blue-600 transition-all" onclick="startQuiz('beginner')">Beginner</button>
             <button class="w-full bg-green-500 text-white p-3 rounded-lg text-lg hover:bg-green-600 transition-all" onclick="startQuiz('intermediate')">Intermediate</button>
             <button class="w-full bg-red-500 text-white p-3 rounded-lg text-lg hover:bg-red-600 transition-all" onclick="startQuiz('advanced')">Advanced</button>
         </div>
+
+        <!-- Contenedor del Quiz -->
         <div id="quiz-container" class="hidden text-center space-y-4">
             <p id="question" class="text-xl font-semibold mb-4"></p>
             <div id="options" class="grid grid-cols-2 gap-4"></div>
             <p id="feedback" class="mt-4 text-lg font-semibold text-gray-800"></p>
             <p class="mt-4 text-gray-600">Correct: <span id="correct-count">0</span> | Incorrect: <span id="incorrect-count">0</span></p>
             <button class="mt-6 bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 transition-all" onclick="returnToMenu()">Back to Menu</button>
-            <!-- Botón de reinicio, alineado a la derecha -->
-            <button class="mt-6 bg-blue-500 text-white p-2 rounded-md text-sm hover:bg-blue-600 transition-all absolute top-0 right-0 m-4" onclick="startQuiz('beginner')">Restart</button>
+            <!-- Botón de reinicio -->
+            <button class="mt-6 bg-blue-500 text-white p-2 rounded-md text-sm hover:bg-blue-600 transition-all absolute top-0 right-0 m-4" onclick="restartQuiz()">Restart</button>
         </div>
+
+        <!-- Contenedor de Notes -->
         <div id="notes-container" class="hidden p-4 bg-gray-200 rounded-lg mt-6">
             <textarea id="notes" class="w-full h-40 p-2 border border-gray-400 rounded" placeholder="Write your notes here..." oninput="saveNotes()"></textarea>
         </div>
+
+        <!-- Contenedor de Theory -->
+        <div id="theory-container" class="hidden mt-6">
+            <h2 class="text-2xl font-bold text-blue-600 mb-4">Phrasal Verbs Theory</h2>
+            <p class="mb-4 text-lg text-gray-700">Here is a list of common Phrasal Verbs with examples to help you understand their usage:</p>
+            
+
+        <!-- Phrasal Verbs con "Call" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Call"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Call back</strong> – I’ll call you back as soon as I finish my meeting.</li>
+        <li><strong>Call for</strong> – The situation calls for immediate action.</li>
+        <li><strong>Call off</strong> – The event was called off due to the bad weather.</li>
+        <li><strong>Call on</strong> – I’ll call on you to answer the question in a moment.</li>
+        <li><strong>Call up</strong> – I need to call up my friend to confirm the plans.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Break" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Break"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Break down</strong> – The car broke down on the way to the airport.</li>
+        <li><strong>Break in</strong> – Someone tried to break in while we were on vacation.</li>
+        <li><strong>Break out</strong> – A fire broke out in the building last night.</li>
+        <li><strong>Break through</strong> – The team managed to break through the defenses and score a goal.</li>
+        <li><strong>Break up</strong> – They decided to break up after five years together.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Bring" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Bring"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Bring about</strong> – His actions brought about many changes in the company.</li>
+        <li><strong>Bring back</strong> – That song really brings back memories of high school.</li>
+        <li><strong>Bring down</strong> – The new policy will bring down costs significantly.</li>
+        <li><strong>Bring in</strong> – They plan to bring in a new manager to improve performance.</li>
+        <li><strong>Bring on</strong> – Stress can bring on headaches.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Come" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Come"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Come across</strong> – I came across some old photos while cleaning.</li>
+        <li><strong>Come along</strong> – You should come along to the party tonight.</li>
+        <li><strong>Come back</strong> – I’ll come back after lunch to finish the work.</li>
+        <li><strong>Come down</strong> – The prices have come down significantly this month.</li>
+        <li><strong>Come in</strong> – Please come in and take a seat.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Get" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Get"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Get ahead</strong> – She’s been working hard to get ahead in her career.</li>
+        <li><strong>Get along</strong> – I get along really well with my coworkers.</li>
+        <li><strong>Get around</strong> – He knows how to get around the city easily.</li>
+        <li><strong>Get away</strong> – We need to get away for the weekend to relax.</li>
+        <li><strong>Get back</strong> – I’ll get back to you after I finish this task.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Go" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Go"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Go ahead</strong> – You can go ahead and start the meeting without me.</li>
+        <li><strong>Go along</strong> – I’ll go along with your plan for now.</li>
+        <li><strong>Go away</strong> – Please go away and leave me alone.</li>
+        <li><strong>Go back</strong> – We need to go back to the office and finish the project.</li>
+        <li><strong>Go by</strong> – As the years go by, things change a lot.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Look" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Look"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Look after</strong> – She looks after the children while their parents are at work.</li>
+        <li><strong>Look ahead</strong> – We need to look ahead and plan for the future.</li>
+        <li><strong>Look at</strong> – Look at this beautiful painting I found in the gallery.</li>
+        <li><strong>Look for</strong> – I’ve been looking for my keys for an hour.</li>
+        <li><strong>Look forward to</strong> – I look forward to meeting you at the conference.</li>
+        <li><strong>Look in</strong> – The manager will look into the issue tomorrow.</li>
+        <li><strong>Look out</strong> – Look out, there’s a car coming!</li>
+        <li><strong>Look over</strong> – Can you look over my report before I submit it?</li>
+        <li><strong>Look up</strong> – I’ll look up the definition of that word online.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Put" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Put"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Put away</strong> – Please put away your books when you're done reading.</li>
+        <li><strong>Put down</strong> – I had to put down my phone to answer the door.</li>
+        <li><strong>Put off</strong> – Don’t put off studying for the exam until the last minute.</li>
+        <li><strong>Put on</strong> – She put on her jacket because it was cold outside.</li>
+        <li><strong>Put up</strong> – They put up decorations for the holiday season.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Set" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Set"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Set back</strong> – The delay set us back by two hours.</li>
+        <li><strong>Set in</strong> – The cold weather has set in, and it’s getting really chilly.</li>
+        <li><strong>Set off</strong> – We set off early to avoid the traffic.</li>
+        <li><strong>Set out</strong> – She set out to find a solution to the problem.</li>
+        <li><strong>Set up</strong> – They set up the equipment for the concert before the show started.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Take" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Take"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Take after</strong> – She takes after her mother in many ways.</li>
+        <li><strong>Take away</strong> – They took away all the trash from the yard.</li>
+        <li><strong>Take back</strong> – I take back what I said earlier; it wasn’t true.</li>
+        <li><strong>Take down</strong> – Can you take down the notes during the meeting?</li>
+        <li><strong>Take in</strong> – It took me a while to take in the news.</li>
+        <li><strong>Take off</strong> – The plane will take off in a few minutes.</li>
+        <li><strong>Take on</strong> – She decided to take on the challenge of running the marathon.</li>
+        <li><strong>Take over</strong> – He will take over as CEO next month.</li>
+        <li><strong>Take up</strong> – I’ve decided to take up photography as a hobby.</li>
+        <li><strong>Take off</strong> – Please take off your shoes before entering the house.</li>
+    </ul>
+</div>
+
+<!-- Phrasal Verbs con "Turn" -->
+<div class="mb-6">
+    <h3 class="text-xl font-semibold text-blue-500">Phrasal Verbs con "Turn"</h3>
+    <ul class="list-disc pl-6">
+        <li><strong>Turn around</strong> – He turned around when he heard someone calling his name.</li>
+        <li><strong>Turn back</strong> – We had to turn back because the trail was blocked by a fallen tree.</li>
+        <li><strong>Turn down</strong> – She turned down the job offer because the salary wasn’t enough.</li>
+        <li><strong>Turn off</strong> – Please turn off the lights when you leave the room.</li>
+        <li><strong>Turn on</strong> – Can you turn on the TV? I want to watch the news.</li>
+    </ul>
+</div>
+<!-- Botón de Volver al Menú en la teoría -->
+<button class="w-full bg-gray-500 text-white p-3 rounded-lg text-lg hover:bg-gray-600 transition-all mt-4" onclick="returnToMenu()">Back to Menu</button>
+</div>
+
+</div>
+
+<!-- Botón de Notas flotante -->
+<button id="notes-button" class="fixed bottom-4 right-4 bg-yellow-500 text-white p-4 rounded-full shadow-lg hover:bg-yellow-600 transition-all" onclick="toggleNotes()">
+Notes
+</button>
+
+        </div>
+
     </div>
+
+    <!-- Botón de Notas flotante -->
+    <button id="notes-button" class="fixed bottom-4 right-4 bg-yellow-500 text-white p-4 rounded-full shadow-lg hover:bg-yellow-600 transition-all" onclick="toggleNotes()">
+        Notes
+    </button>
 
     <script>
         const questions = {
@@ -203,18 +378,19 @@
             ],
         };
 
+        
         let currentQuestions = [];
         let currentIndex = 0;
         let correctCount = 0;
         let incorrectCount = 0;
 
-        
         function startQuiz(level) {
             currentQuestions = questions[level];
             shuffleArray(currentQuestions); // Mezclamos las preguntas
             currentIndex = 0;
             correctCount = 0;
             incorrectCount = 0;
+            document.getElementById("start-screen").classList.add("hidden");
             document.getElementById("level-selection").classList.add("hidden");
             document.getElementById("quiz-container").classList.remove("hidden");
             loadQuestion();
@@ -250,9 +426,8 @@
             } else {
                 incorrectCount++;
                 document.getElementById("feedback").innerText = `Incorrect! The correct answer was ${correctAnswer}.`;
-                // Esperar 5 segundos antes de pasar a la siguiente pregunta si la respuesta es incorrecta
                 setTimeout(loadQuestion, 5000);
-                return; // No pasa inmediatamente a la siguiente pregunta
+                return;
             }
             document.getElementById("correct-count").innerText = correctCount;
             document.getElementById("incorrect-count").innerText = incorrectCount;
@@ -261,8 +436,9 @@
         }
 
         function returnToMenu() {
-            document.getElementById("level-selection").classList.remove("hidden");
             document.getElementById("quiz-container").classList.add("hidden");
+            document.getElementById("theory-container").classList.add("hidden");
+            document.getElementById("start-screen").classList.remove("hidden");
         }
 
         function toggleNotes() {
@@ -279,6 +455,25 @@
         }
 
         window.onload = loadNotes;
+
+        // Mostrar la pantalla de selección del quiz
+        function showQuizMenu() {
+            document.getElementById("start-screen").classList.add("hidden");
+            document.getElementById("level-selection").classList.remove("hidden");
+        }
+
+        // Mostrar la teoría
+        function showTheory() {
+            document.getElementById("start-screen").classList.add("hidden");
+            document.getElementById("level-selection").classList.add("hidden");
+            document.getElementById("quiz-container").classList.add("hidden");
+            document.getElementById("theory-container").classList.remove("hidden");
+        }
+
+        // Reiniciar el quiz
+        function restartQuiz() {
+            startQuiz("beginner");
+        }
     </script>
 </body>
 </html>
